@@ -23,7 +23,7 @@ Game.prototype.battle = function () {
         if (action === "Use potion") {
           if (!this.player.getInventory()) {
             console.log("You don't have any potions!");
-            return;
+            return this.checkEndOfBattle();
           }
 
           inquirer
@@ -37,12 +37,18 @@ Game.prototype.battle = function () {
             })
             .then(({ action }) => {
               const potionDetails = action.split(": ");
-
               this.player.usePotion(potionDetails[0] - 1);
               console.log(`You used a ${potionDetails[1]} potion.`);
+              this.checkEndOfBattle();
             });
+        } else {
+          // after player attacks...
+          this.checkEndOfBattle();
         }
       });
+  } else {
+    // after enemy attacks...
+    this.checkEndOfBattle();
   }
 };
 
